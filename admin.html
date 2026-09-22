@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>صندوق أوتاد العائلي — لوحة المساهمات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #1B2A41;
+    --ink-soft: #47546A;
+    --paper: #F6F4EE;
+    --card: #FFFFFF;
+    --line: #E4DECF;
+    --gold: #B07F2E;
+    --gold-soft: #EDE0C8;
+    --good: #4C7A63;
+    --good-soft: #E4EEE8;
+    --bad: #A0473C;
+    --bad-soft: #F3E4E1;
+    font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  header{
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+    position: relative;
+  }
+  .peg{
+    position: absolute;
+    top: 56px;
+    right: 0;
+    width: 3px;
+    height: 46px;
+    background: var(--gold);
+  }
+  header h1{
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    padding-right: 16px;
+  }
+  header p{
+    margin: 0;
+    padding-right: 16px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .hero{
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 28px;
+    padding-right: 16px;
+    flex-wrap: wrap;
+  }
+  .hero .num{
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -1px;
+  }
+  .hero .cur{
+    font-size: 18px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .hero .label{
+    width: 100%;
+    padding-right: 2px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .kpis{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 44px;
+  }
+  .kpi{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .kpi .v{ font-size: 24px; font-weight: 700; }
+  .kpi .l{ font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+
+  section{ margin-bottom: 48px; }
+  section > h2{
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  section > .sub{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+  }
+
+  .tabs{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .tab{
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .tab:hover{ border-color: var(--gold); color: var(--ink); }
+  .tab.active{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+
+  .quarter-total{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .quarter-total .t1{ font-size: 14px; color: var(--ink-soft); }
+  .quarter-total .t2{ font-size: 22px; font-weight: 700; }
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td{
+    text-align: right;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  th{
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    background: #FAF8F3;
+  }
+  tr:last-child td{ border-bottom: none; }
+  td.num, th.num{ text-align: left; font-variant-numeric: tabular-nums; }
+  .pct-bar{
+    display: inline-block;
+    height: 5px;
+    background: var(--gold-soft);
+    border-radius: 3px;
+    position: relative;
+    width: 70px;
+    vertical-align: middle;
+    margin-left: 8px;
+    overflow: hidden;
+  }
+  .pct-bar i{
+    position: absolute; right:0; top:0; bottom:0;
+    background: var(--gold);
+    border-radius: 3px;
+  }
+  .empty-state{
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 28px 20px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .lookup-box{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .lookup-row{ display: flex; gap: 10px; flex-wrap: wrap; }
+  select, input{
+    flex: 1;
+    min-width: 220px;
+    font-family: inherit;
+    font-size: 14.5px;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .result{
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    display: none;
+  }
+  .result.show{ display: block; }
+  .result-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .result-grid .v{ font-size: 21px; font-weight: 700; }
+  .result-grid .l{ font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+  .result .none{
+    background: var(--good-soft);
+    color: var(--good);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  a.link-btn{
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+  }
+  a.link-btn:hover{ border-bottom-color: var(--gold); }
+
+  /* ---------- Admin form ---------- */
+  .form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .field{ display: flex; flex-direction: column; gap: 6px; }
+  .field label{ font-size: 13px; color: var(--ink-soft); font-weight: 500; }
+  .field .opt{ font-weight: 400; color: var(--ink-soft); opacity: .8; }
+  .field input, .field select{ min-width: 0; width: 100%; }
+  .submit-btn{
+    border: none;
+    background: var(--ink);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .submit-btn:hover{ background: #0f2033; }
+  .submit-btn:disabled{ opacity: .6; cursor: default; }
+  .form-msg{
+    margin-top: 12px;
+    font-size: 13.5px;
+    display: none;
+  }
+  .form-msg.show{ display: block; }
+  .form-msg.ok{ color: var(--good); }
+  .form-msg.bad{ color: var(--bad); }
+
+  .sync-line{
+    margin-top: 14px;
+    padding-right: 16px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sync-line .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--good);
+    display: inline-block;
+  }
+  .sync-line.err .dot{ background: var(--bad); }
+  .refresh-btn{
+    border: none;
+    background: none;
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+
+  footer{
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 600px){
+    .form-grid{ grid-template-columns: 1fr; }
+    .kpis{ grid-template-columns: 1fr; }
+    .result-grid{ grid-template-columns: 1fr; }
+    header{ padding-top: 36px; }
+    .hero .num{ font-size: 44px; }
+    table, thead, tbody, th, td, tr{ display: block; }
+    thead{ display:none; }
+    tr{ border-bottom: 1px solid var(--line); padding: 10px 16px; }
+    tr:last-child{ border-bottom: none; }
+    td{ border: none; padding: 4px 0; display: flex; justify-content: space-between; }
+    td::before{ content: attr(data-label); color: var(--ink-soft); font-size: 12.5px; }
+    td.num{ text-align: right; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="peg"></div>
+    <h1>صندوق أوتاد العائلي — صفحة الإدارة</h1>
+    <p>هذي الصفحة للإدخال فقط، لا ترسلها للعائلة — رابط العرض العام مختلف</p>
+    <div class="hero">
+      <span class="num" id="heroTotal">—</span>
+      <span class="cur">ريال</span>
+      <span class="label">إجمالي المساهمات منذ إنشاء الصندوق</span>
+    </div>
+    <div class="sync-line" id="syncLine">جاري تحميل البيانات...</div>
+  </header>
+
+  <section id="addSection">
+    <h2>إضافة حوالة جديدة</h2>
+    <p class="sub">تُكتب مباشرة في جوجل شيتس — الموقع يتحدث تلقائياً بعد ثوانٍ</p>
+    <div class="lookup-box">
+      <form id="addForm">
+        <div class="form-grid">
+          <div class="field">
+            <label>اسم المستثمر</label>
+            <input list="namesList" name="name" id="fName" placeholder="اكتب أو اختر الاسم" required>
+            <datalist id="namesList"></datalist>
+          </div>
+          <div class="field">
+            <label>المبلغ (ريال)</label>
+            <input type="number" name="amount" id="fAmount" min="1" step="1" required>
+          </div>
+          <div class="field">
+            <label>الربع</label>
+            <select name="quarter" id="fQuarter" required></select>
+          </div>
+          <div class="field">
+            <label>التاريخ</label>
+            <input type="date" name="date" id="fDate" required>
+          </div>
+          <div class="field">
+            <label>رمز الملف <span class="opt">(اختياري)</span></label>
+            <input type="text" name="code" id="fCode" placeholder="مثال: 1.7">
+          </div>
+          <div class="field">
+            <label>رابط الحوالة <span class="opt">(اختياري)</span></label>
+            <input type="url" name="link" id="fLink" placeholder="رابط الدرايف">
+          </div>
+          <div class="field">
+            <label>كلمة سر الإدارة</label>
+            <input type="password" name="secret" id="fSecret" required autocomplete="current-password">
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">إضافة الحوالة</button>
+        <div class="form-msg" id="formMsg"></div>
+      </form>
+      <iframe name="hiddenTarget" id="hiddenTarget" style="display:none"></iframe>
+    </div>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="kpiInvestors">0</div><div class="l">عدد المستثمرين</div></div>
+    <div class="kpi"><div class="v" id="kpiTransfers">0</div><div class="l">عدد الحوالات</div></div>
+    <div class="kpi"><div class="v" id="kpiQuarters">0</div><div class="l">عدد الأرباع النشطة</div></div>
+  </div>
+
+  <section>
+    <h2>مساهمات كل ربع</h2>
+    <p class="sub">اختر ربعاً لعرض إجمالي مساهماته وتفصيل كل مستثمر فيه</p>
+    <div class="tabs" id="tabs"></div>
+    <div class="quarter-total">
+      <span class="t1" id="quarterLabel">الربع الثالث</span>
+      <span class="t2" id="quarterTotal">0 ريال</span>
+    </div>
+    <div id="quarterTableWrap"></div>
+  </section>
+
+  <section>
+    <h2>استعلام عن مساهم</h2>
+    <p class="sub">اختر اسمك من القائمة لعرض إجمالي مساهمتك ونسبتها من الصندوق</p>
+    <div class="lookup-box">
+      <div class="lookup-row">
+        <select id="nameSelect">
+          <option value="">اختر الاسم...</option>
+        </select>
+      </div>
+      <div class="result" id="lookupResult"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>سجل الحوالات</h2>
+    <p class="sub">كل حوالة مسجّلة في الصندوق مرتبة من الأحدث</p>
+    <div id="logTableWrap"></div>
+  </section>
+
+  <footer>صندوق أوتاد العائلي — للمشاركين في الصندوق فقط</footer>
+</div>
+
+<script>
+// ================== إعدادات المصدر (جوجل شيتس) ==================
+const SHEET_ID = "1oYkStoMurLQflBARriU4uhge--F3dP1ynBIbjagOUjs";
+const DATA_SHEET = "عام ٢٠٢٦م";
+const NAMES_SHEET = "ملاحظات";
+const QUARTERS = ["الأول","الثاني","الثالث","الرابع"];
+
+// رابط تطبيق ويب Google Apps Script — استبدله برابطك بعد نشر Code.gs
+// (Deploy -> New deployment -> Web app -> انسخ الرابط اللي ينتهي بـ /exec)
+const WEB_APP_URL = "PASTE_WEB_APP_URL_HERE";
+
+// JSONP loader — Google's gviz endpoint doesn't send CORS headers for fetch(),
+// but a <script> tag load isn't subject to CORS, and gviz lets us wrap its
+// JSON response in a callback of our choosing.
+let _jsonpSeq = 0;
+function loadSheetJSONP(sheetName){
+  return new Promise((resolve, reject) => {
+    const cbName = "__gvizCb" + (_jsonpSeq++);
+    const script = document.createElement("script");
+    window[cbName] = (resp) => { resolve(resp); delete window[cbName]; script.remove(); };
+    script.onerror = () => { delete window[cbName]; script.remove(); reject(new Error("load failed")); };
+    script.src = "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
+      "/gviz/tq?tqx=out:json;responseHandler:" + cbName +
+      "&sheet=" + encodeURIComponent(sheetName) + "&_=" + Date.now();
+    document.body.appendChild(script);
+  });
+}
+
+function tableToRows(resp){
+  if(!resp || resp.status === "error" || !resp.table || !resp.table.rows) return [];
+  return resp.table.rows.map(r =>
+    (r.c || []).map(cell => cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : "")
+  );
+}
+
+const fmt = n => n.toLocaleString("ar-SA");
+const pct = n => (n*100).toLocaleString("ar-SA", {maximumFractionDigits: 1}) + "٪";
+
+let TRANSACTIONS = [];
+let ALL_NAMES = [];
+let TOTAL = 0;
+let currentQuarter = "الثالث";
+
+const tabsEl = document.getElementById("tabs");
+
+async function loadData(){
+  const syncEl = document.getElementById("syncLine");
+  syncEl.classList.remove("err");
+  syncEl.innerHTML = "جاري تحميل البيانات...";
+
+  try{
+    const [dataResp, namesResp] = await Promise.all([
+      loadSheetJSONP(DATA_SHEET),
+      loadSheetJSONP(NAMES_SHEET)
+    ]);
+
+    const dataRows = tableToRows(dataResp);
+    const namesRows = tableToRows(namesResp);
+
+    TRANSACTIONS = dataRows
+      .map(r => ({
+        name: (r[1]||"").toString().trim(),
+        amount: parseFloat((r[2]||"").toString().replace(/,/g,"")),
+        code: (r[3]||"").toString().trim(),
+        date: (r[4]||"").toString().trim(),
+        quarter: (r[5]||"").toString().trim(),
+        link: (r[7]||"").toString().trim()
+      }))
+      .filter(t => t.name && t.name !== "اسم المستثمر" && t.name !== "الإجمالي" && !isNaN(t.amount) && t.amount > 0);
+
+    ALL_NAMES = namesRows
+      .map(r => (r[0]||"").toString().trim())
+      .filter((v,i) => v && i > 0);
+    TRANSACTIONS.forEach(t => { if(!ALL_NAMES.includes(t.name)) ALL_NAMES.push(t.name); });
+
+    TOTAL = TRANSACTIONS.reduce((s,t)=>s+t.amount, 0);
+    if(TRANSACTIONS.length === 0) throw new Error("no rows parsed");
+
+    renderAll();
+
+    const now = new Date();
+    syncEl.innerHTML = '<span class="dot"></span> آخر تحديث ' +
+      now.toLocaleTimeString("ar-SA", {hour:"2-digit", minute:"2-digit"}) +
+      ' <button class="refresh-btn" onclick="loadData()">تحديث الآن</button>';
+
+  } catch(err){
+    syncEl.classList.add("err");
+    syncEl.innerHTML = '<span class="dot"></span> تعذّر تحميل البيانات — ' +
+      '<button class="refresh-btn" onclick="loadData()">إعادة المحاولة</button>';
+  }
+}
+
+function renderAll(){
+  const activeQuarters = new Set(TRANSACTIONS.map(t=>t.quarter));
+  const uniqueInvestors = new Set(TRANSACTIONS.map(t=>t.name));
+
+  document.getElementById("heroTotal").textContent = fmt(TOTAL);
+  document.getElementById("kpiInvestors").textContent = fmt(uniqueInvestors.size);
+  document.getElementById("kpiTransfers").textContent = fmt(TRANSACTIONS.length);
+  document.getElementById("kpiQuarters").textContent = fmt(activeQuarters.size);
+
+  const withData = QUARTERS.filter(q => activeQuarters.has(q));
+  currentQuarter = withData.length ? withData[withData.length-1] : "الأول";
+
+  renderTabs();
+  renderQuarter();
+  renderNameSelect();
+  renderLog();
+  renderAdminForm();
+}
+
+function renderTabs(){
+  tabsEl.innerHTML = "";
+  QUARTERS.forEach(q=>{
+    const b = document.createElement("button");
+    b.className = "tab" + (q === currentQuarter ? " active" : "");
+    b.textContent = "الربع " + q;
+    b.onclick = () => { currentQuarter = q; renderTabs(); renderQuarter(); };
+    tabsEl.appendChild(b);
+  });
+}
+
+function renderQuarter(){
+  const rows = TRANSACTIONS.filter(t => t.quarter === currentQuarter);
+  const qTotal = rows.reduce((s,t)=>s+t.amount,0);
+  document.getElementById("quarterLabel").textContent = "الربع " + currentQuarter;
+  document.getElementById("quarterTotal").textContent = fmt(qTotal) + " ريال";
+
+  const wrap = document.getElementById("quarterTableWrap");
+  if(rows.length === 0){
+    wrap.innerHTML = '<div class="empty-state">لا توجد مساهمات مسجّلة في هذا الربع بعد</div>';
+    return;
+  }
+
+  const byName = {};
+  rows.forEach(t=>{
+    byName[t.name] = byName[t.name] || {amount:0,count:0};
+    byName[t.name].amount += t.amount;
+    byName[t.name].count += 1;
+  });
+  const names = Object.keys(byName).sort((a,b)=>byName[b].amount - byName[a].amount);
+
+  let html = '<table><thead><tr><th>المساهم</th><th class="num">عدد الحوالات</th><th class="num">إجمالي المساهمة</th><th class="num">النسبة</th></tr></thead><tbody>';
+  names.forEach(n=>{
+    const d = byName[n];
+    const p = d.amount / qTotal;
+    html += `<tr>
+      <td data-label="المساهم">${n}</td>
+      <td class="num" data-label="عدد الحوالات">${fmt(d.count)}</td>
+      <td class="num" data-label="إجمالي المساهمة">${fmt(d.amount)} ريال</td>
+      <td class="num" data-label="النسبة"><span class="pct-bar"><i style="width:${(p*100).toFixed(1)}%"></i></span>${pct(p)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+const select = document.getElementById("nameSelect");
+function renderNameSelect(){
+  select.innerHTML = '<option value="">اختر الاسم...</option>';
+  ALL_NAMES.forEach(n=>{
+    const o = document.createElement("option");
+    o.value = n; o.textContent = n;
+    select.appendChild(o);
+  });
+  document.getElementById("lookupResult").classList.remove("show");
+}
+
+select.onchange = () => {
+  const name = select.value;
+  const resultEl = document.getElementById("lookupResult");
+  if(!name){ resultEl.classList.remove("show"); return; }
+
+  const rows = TRANSACTIONS.filter(t=>t.name === name);
+  if(rows.length === 0){
+    resultEl.innerHTML = '<div class="none">لا توجد مساهمات مسجّلة بعد باسم ' + name + '</div>';
+    resultEl.classList.add("show");
+    return;
+  }
+  const total = rows.reduce((s,t)=>s+t.amount,0);
+  const p = total / TOTAL;
+  resultEl.innerHTML = `<div class="result-grid">
+    <div><div class="v">${fmt(total)} ريال</div><div class="l">إجمالي المساهمة</div></div>
+    <div><div class="v">${fmt(rows.length)}</div><div class="l">عدد الحوالات</div></div>
+    <div><div class="v">${pct(p)}</div><div class="l">من إجمالي الصندوق</div></div>
+  </div>`;
+  resultEl.classList.add("show");
+};
+
+function renderLog(){
+  const sorted = [...TRANSACTIONS].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  let html = '<table><thead><tr><th>التاريخ</th><th>المستثمر</th><th class="num">المبلغ</th><th>الربع</th><th>الحوالة</th></tr></thead><tbody>';
+  sorted.forEach(t=>{
+    const d = new Date(t.date);
+    const dateStr = d.toLocaleDateString("ar-SA-u-nu-latn", {day:"numeric", month:"short", year:"numeric"});
+    html += `<tr>
+      <td data-label="التاريخ">${dateStr}</td>
+      <td data-label="المستثمر">${t.name}</td>
+      <td class="num" data-label="المبلغ">${fmt(t.amount)} ريال</td>
+      <td data-label="الربع">${t.quarter}</td>
+      <td data-label="الحوالة">${t.link ? '<a class="link-btn" href="'+t.link+'" target="_blank" rel="noopener">عرض الحوالة</a>' : '—'}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById("logTableWrap").innerHTML = html;
+}
+
+loadData();
+
+// ================== فورم إضافة حوالة ==================
+let _adminFormReady = false;
+
+function renderAdminForm(){
+  const qSel = document.getElementById("fQuarter");
+  if(qSel.children.length === 0){
+    QUARTERS.forEach(q=>{
+      const o = document.createElement("option");
+      o.value = q; o.textContent = "الربع " + q;
+      qSel.appendChild(o);
+    });
+    qSel.value = currentQuarter;
+  }
+
+  const dl = document.getElementById("namesList");
+  dl.innerHTML = "";
+  ALL_NAMES.forEach(n=>{
+    const o = document.createElement("option");
+    o.value = n;
+    dl.appendChild(o);
+  });
+
+  const dateInput = document.getElementById("fDate");
+  if(!dateInput.value){
+    dateInput.value = new Date().toISOString().slice(0,10);
+  }
+
+  if(!_adminFormReady){
+    _adminFormReady = true;
+    wireAdminForm();
+  }
+}
+
+function wireAdminForm(){
+  const form = document.getElementById("addForm");
+  const msg = document.getElementById("formMsg");
+  const btn = document.getElementById("submitBtn");
+  const iframe = document.getElementById("hiddenTarget");
+
+  if(WEB_APP_URL === "PASTE_WEB_APP_URL_HERE"){
+    msg.textContent = "لازم تحط رابط تطبيق Apps Script في متغيّر WEB_APP_URL قبل ما يشتغل الفورم.";
+    msg.className = "form-msg show bad";
+  }
+
+  form.action = WEB_APP_URL;
+  form.method = "POST";
+  form.target = "hiddenTarget";
+
+  form.addEventListener("submit", () => {
+    if(WEB_APP_URL === "PASTE_WEB_APP_URL_HERE"){
+      return; // let the default happen harmlessly (nothing to submit to)
+    }
+    btn.disabled = true;
+    btn.textContent = "جاري الإضافة...";
+    msg.className = "form-msg show";
+    msg.textContent = "";
+
+    // Form posts to the hidden iframe (classic cross-origin-safe technique —
+    // Apps Script doesn't send CORS headers, so fetch() can't read the
+    // response, but a real <form> submission doesn't need to).
+    let settled = false;
+    iframe.onload = () => {
+      if(settled) return;
+      settled = true;
+      btn.disabled = false;
+      btn.textContent = "إضافة الحوالة";
+      msg.className = "form-msg show ok";
+      msg.textContent = "تمت الإضافة — جاري تحديث اللوحة...";
+      const _s = document.getElementById("fSecret").value;
+      form.reset();
+      document.getElementById("fSecret").value = _s;
+      document.getElementById("fDate").value = new Date().toISOString().slice(0,10);
+      setTimeout(loadData, 2500); // امهال الشيت وقت يظهر التحديث في جوجل
+    };
+    // fallback in case the iframe load event doesn't fire
+    setTimeout(() => {
+      if(settled) return;
+      settled = true;
+      btn.disabled = false;
+      btn.textContent = "إضافة الحوالة";
+      msg.className = "form-msg show ok";
+      msg.textContent = "تم الإرسال — جاري تحديث اللوحة...";
+      setTimeout(loadData, 1500);
+    }, 4000);
+  });
+}
+</script>
+</body>
+</html>
