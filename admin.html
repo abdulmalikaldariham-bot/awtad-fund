@@ -440,6 +440,9 @@ const SHEET_ID = "1oYkStoMurLQflBARriU4uhge--F3dP1ynBIbjagOUjs";
 const DATA_SHEET = "عام ٢٠٢٦م";
 const NAMES_SHEET = "ملاحظات";
 const QUARTERS = ["الأول","الثاني","الثالث","الرابع"];
+// نسخة احتياطية من آخر ملف Excel — تُستخدم إذا تعذّر الاتصال بجوجل شيتس
+const SNAPSHOT = {"asOf": "2026-09-22", "transactions": [{"name": "خالد بن زيد الدريهم", "amount": 30000, "code": "١.١", "date": "2026-07-24", "quarter": "الثالث", "link": "https://drive.google.com/file/d/11foVXxSRE7XBJlE0n_QVXTetAob6zGCK/view?usp=sharing"}, {"name": "وفاء بنت عبدالله الدريهم", "amount": 1000, "code": "١.١", "date": "2026-07-24", "quarter": "الثالث", "link": "https://drive.google.com/file/d/11foVXxSRE7XBJlE0n_QVXTetAob6zGCK/view?usp=sharing"}, {"name": "عمر بن خالد الدريهم", "amount": 1000, "code": "١.١", "date": "2026-07-24", "quarter": "الثالث", "link": "https://drive.google.com/file/d/11foVXxSRE7XBJlE0n_QVXTetAob6zGCK/view?usp=sharing"}, {"name": "أسماء بنت خالد الدريهم", "amount": 2000, "code": "١.٢", "date": "2026-07-24", "quarter": "الثالث", "link": "https://drive.google.com/file/d/14zxFC6U8MT-GaUVh1-iEHIGb6pvq6VFK/view?usp=sharing"}, {"name": "وفاء بنت عبدالله الدريهم", "amount": 1000, "code": "1.3", "date": "2026-08-28", "quarter": "الثالث", "link": "https://drive.google.com/file/d/1P5v16kUS6LabluHsPVvR64yE_jy3f1ws/view?usp=sharing"}, {"name": "عمر بن خالد الدريهم", "amount": 1000, "code": "1.3", "date": "2026-08-28", "quarter": "الثالث", "link": "https://drive.google.com/file/d/1P5v16kUS6LabluHsPVvR64yE_jy3f1ws/view?usp=sharing"}, {"name": "عبدالملك بن خالد الدريهم", "amount": 3000, "code": "1.4", "date": "2026-08-28", "quarter": "الثالث", "link": "https://drive.google.com/file/d/1T5nx5d3k4GzYMx2ZjFy4WKTA8NWhpWkl/view?usp=sharing"}, {"name": "عبدالعزيز بن خالد الدريهم", "amount": 3000, "code": "1.5", "date": "2026-08-30", "quarter": "الثالث", "link": "https://drive.google.com/file/d/1EwuSPIEDRXqAZhzKAi06NA_HQo4exZFi/view?usp=sharing"}, {"name": "ريم بنت خالد الدريهم", "amount": 3000, "code": "1.6", "date": "2026-09-01", "quarter": "الثالث", "link": "https://drive.google.com/file/d/1QXW0nVe1wVQLPOFqqWRr16dvoNYpbemq/view?usp=sharing"}], "names": ["خالد بن زيد الدريهم", "وفاء بنت عبدالله الدريهم", "زيد بن خالد الدريهم", "عبدالله بن خالد الدريهم", "حصة بنت خالد الدريهم", "أسماء بنت خالد الدريهم", "عبدالعزيز بن خالد الدريهم", "عبدالملك بن خالد الدريهم", "ريم بنت خالد الدريهم", "مشاري بن خالد الدريهم", "ريان بن خالد الدريهم", "عمر بن خالد الدريهم"]};
+
 
 // رابط تطبيق ويب Google Apps Script — استبدله برابطك بعد نشر Code.gs
 // (Deploy -> New deployment -> Web app -> انسخ الرابط اللي ينتهي بـ /exec)
@@ -520,9 +523,14 @@ async function loadData(){
       ' <button class="refresh-btn" onclick="loadData()">تحديث الآن</button>';
 
   } catch(err){
-    syncEl.classList.add("err");
-    syncEl.innerHTML = '<span class="dot"></span> تعذّر تحميل البيانات — ' +
-      '<button class="refresh-btn" onclick="loadData()">إعادة المحاولة</button>';
+    TRANSACTIONS = SNAPSHOT.transactions.slice();
+    ALL_NAMES = SNAPSHOT.names.slice();
+    TRANSACTIONS.forEach(t => { if(!ALL_NAMES.includes(t.name)) ALL_NAMES.push(t.name); });
+    TOTAL = TRANSACTIONS.reduce((s,t)=>s+t.amount, 0);
+    renderAll();
+    const d = new Date(SNAPSHOT.asOf + "T12:00:00");
+    syncEl.innerHTML = '<span class="dot"></span> البيانات محدّثة حتى ' +
+      d.toLocaleDateString("ar-SA-u-nu-latn", {day:"numeric", month:"long", year:"numeric"});
   }
 }
 
